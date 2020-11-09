@@ -1,0 +1,2 @@
+# agentsystem
+这是一个残缺的项目，能供参考的部分只有mybatis和c3p0的xml配置和log4j的properties的配置
