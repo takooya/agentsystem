@@ -1,14 +1,17 @@
 package cn.kgc.agentsystem.pojo;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
+
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name="as_user")
+@Table(name = "as_user")
 public class User extends Base {
     private String userCode;
     private String userName;

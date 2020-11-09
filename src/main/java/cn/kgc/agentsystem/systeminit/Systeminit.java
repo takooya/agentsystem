@@ -28,8 +28,9 @@ public class Systeminit implements ServletContextListener {
         log.info("初始化Spring WebApplicationContext 开始");
         Constants.ctx = WebApplicationContextUtils
                 .getWebApplicationContext(sce.getServletContext());
-        if (null == Constants.ctx)
+        if (null == Constants.ctx) {
             log.warn("初始化Spring WebApplicationContext 失败");
+        }
         log.info("初始化Spring WebApplicationContext 完成");
         // 2.拿到systemConfigService
         if (Constants.ctx != null) {
