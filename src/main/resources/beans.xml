@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.2.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+    <context:component-scan base-package="cn.kgc.agentsystem"/>
+
+    <!--jdbc数据库配置-->
+    <!--<bean id="jdbcDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/agentsystemdb"/>
+        <property name="username" value="root"/>
+        <property name="password" value="1234"/>
+    </bean>-->
+    <!-- 读取Properties文件  -->
+    <context:property-placeholder location="classpath:c3p0.properties"/>
+
+    <bean id="c3p0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <property name="driverClass" value="${driverClass}"/>
+        <property name="jdbcUrl" value="${jdbcUrl}"/>
+        <property name="user" value="${user}"/>
+        <property name="password" value="${password}"/>
+        <property name="minPoolSize" value="${c3p0.minPoolSize}"/>
+        <property name="maxPoolSize" value="${c3p0.maxPoolSize}"/>
+        <property name="acquireIncrement" value="${c3p0.acquireIncrement}"/>
+        <property name="checkoutTimeout" value="${c3p0.checkoutTimeout}"/>
+    </bean>
+<!--无需配置sqlSessionFactory,框架自动加载-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="c3p0DataSource"/>
+        <!--<property name="dataSource" ref="jdbcDataSource"/>-->
+        <property name="configLocation" value="classpath:beans-mybatis-configuration.xml"/>
+    </bean>
+<!--
+扫描接口,并自动查找相应的mapper文件
+每找到一个dao文件,MapperScannerConfigurer都会查找同文件夹下同名.xml文件
+-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.kgc.agentsystem.dao"/>
+        <!--<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>-->
+    </bean>
+
+</beans>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.2.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
+
+    <!--SpringMVC组成扫描-->
+    <context:component-scan base-package="cn.kgc.agentsystem"/>
+    <mvc:interceptors>
+        <!--  使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求   -->
+        <!-- <bean class="com.bybo.aca.web.interceptor.Login"/> -->
+        <mvc:interceptor>
+            <!-- 进行拦截：/**表示拦截所有controller,匹配逻辑视图名 -->
+            <mvc:mapping path="/user/*"/>
+            <!--不进行拦截 -->
+            <mvc:exclude-mapping path="/user/welcome"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/user/error"></mvc:exclude-mapping>
+            <bean class="cn.kgc.agentsystem.interceptors.TestInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!--SpringMVC的视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/"/>
+        <!--这里的order表示视图解析的优先级，数目越小优先级越大（即：0为优先级最高，所以优先进行处理视图）-->
+        <property name="order" value="2"/>
+    </bean>
+
+    <!--SpringMVC的注解扫描驱动-->
+    <mvc:annotation-driven></mvc:annotation-driven>
+</beans>
